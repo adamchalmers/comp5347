@@ -61,19 +61,19 @@ public class SurveyResults extends HttpServlet {
 		// Check if they've already voted recently
 		if (vote != null && gender != null) {
 			if (request.getSession().getAttribute(VOTED) != null) {
-				request.setAttribute("message", "You've already voted!");
-				request.setAttribute("style", "red");
+				request.getSession().setAttribute("message", "You've already voted!");
+				request.getSession().setAttribute("style", "red");
 			} else {
-				request.setAttribute("message", "Thank you for voting!");
-				request.setAttribute("style", "green");
+				request.getSession().setAttribute("message", "Thank you for voting!");
+				request.getSession().setAttribute("style", "green");
 	
 				// Record their vote 
 				surveyModel.addPref(gender, vote);
 				request.getSession().setAttribute(VOTED, true);
 			}
 		} else {
-			request.setAttribute("message", "Survey results:");
-			request.setAttribute("style", "blue");
+			request.getSession().setAttribute("message", "Survey results:");
+			request.getSession().setAttribute("style", "blue");
 		}
 		
 		// let a jsp page display the result
