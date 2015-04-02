@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 	@WebInitParam(name="products", value=survey.model.Config.PRODUCTS)
 })
 public class SurveyResults extends HttpServlet {
+	private static final String VOTED = "voted";
 	private static final long serialVersionUID = 1L;
 	public String output = "Test.";
 
@@ -49,10 +50,32 @@ public class SurveyResults extends HttpServlet {
 			getServletContext().setAttribute(SurveyForm.SURVEY_RESULT, surveyModel);
 		}
 		
-		Integer vote = Integer.parseInt(request.getParameter("vote"));
-		Integer gender = Integer.parseInt(request.getParameter("gender"));
-		surveyModel.addPref(gender, vote);
-
+		Integer vote = null, gender = null;
+		try {
+			vote = Integer.parseInt(request.getParameter("vote"));
+			gender = Integer.parseInt(request.getParameter("gender"));
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+		// Check if they've already voted recently
+		if (vote != null && gender != null) {
+			if (request.getSession().getAttribute(VOTED) != null) {
+				request.setAttribute("message", "You've already voted!");
+				request.setAttribute("style", "red");
+			} else {
+				request.setAttribute("message", "Thank you for voting!");
+				request.setAttribute("style", "green");
+	
+				// Record their vote 
+				surveyModel.addPref(gender, vote);
+				request.getSession().setAttribute(VOTED, true);
+			}
+		} else {
+			request.setAttribute("message", "Survey results:");
+			request.setAttribute("style", "blue");
+		}
+		
 		// let a jsp page display the result
 		String output = "Total votes: " + surveyModel.getVotes();
 		request.setAttribute("output", output);
