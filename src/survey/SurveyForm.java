@@ -10,16 +10,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import survey.model.SurveyResult;
+import survey.model.SurveyModel;
 /**
  * Servlet implementation class SurveyForm
  * This servlet displays a survey for user's next purchase
  */
 
-@WebServlet(value="/surveyForm", initParams = {
-		@WebInitParam(name="products", value="iphone6s, Samsung Galaxy 7, Nokia Lumia 532 ")
+@WebServlet(value="/index.html", initParams = {
+	@WebInitParam(name="products", value=survey.model.Config.PRODUCTS)
 })
 public class SurveyForm extends HttpServlet {
+	public static final String SURVEY_RESULT = "surveyResult";
+	public static final String PRODUCT_LIST = "productList";
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -36,9 +38,9 @@ public class SurveyForm extends HttpServlet {
 	public void init(){
 		String products = getServletConfig().getInitParameter("products");
 		String[] productList = products.split(",");
-		SurveyResult sr = new SurveyResult(productList.length);
-		getServletContext().setAttribute("productList", productList);
-		getServletContext().setAttribute("surveyResult", sr);
+		SurveyModel sr = new SurveyModel(productList.length);
+		getServletContext().setAttribute(PRODUCT_LIST, productList);
+		getServletContext().setAttribute(SURVEY_RESULT, sr);
 	}
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)

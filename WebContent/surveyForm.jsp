@@ -14,12 +14,12 @@
 <h4>Your Gender: </h4>
 
 <label>
-<input type="radio" name="gender" value = 1 checked="checked"/>
+<input type="radio" name="gender" value=1 checked="checked"/>
 Female
 </label> <br />
 
 <label>
-<input type="radio" name="gender" value = 0 />
+<input type="radio" name="gender" value=0 />
 Male
 </label> <br />
 
@@ -27,14 +27,14 @@ Male
 <c:forEach var="product" items= "${applicationScope.productList}" 
 	varStatus="productCount">
 <label>
-	<input type="radio" name = "vote" value = "${productCount.count-1}"  />
+	<input type="radio" name="vote" value="${productCount.count-1}"  />
 	${product}
 </label> <br />
 </c:forEach>
 
 
-<input type = "submit" value = "Submit Vote" />
-<input type = "reset" value = "Clear Vote Form" />
+<input type="submit" value="Submit Vote" />
+<input type="reset" value="Clear Vote Form" />
 </form>
 
 </body>

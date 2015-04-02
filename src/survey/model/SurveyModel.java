@@ -6,8 +6,10 @@ package survey.model;
  * @author Ying Zhou
  *
  */
-public class SurveyResult {
-
+public class SurveyModel {
+	
+	public String output = "ABC";
+	public int numVotes = 0;
 	private int[] femalePreference, malePreference;
 	
 	public int[] getFemalePreference() {
@@ -18,11 +20,11 @@ public class SurveyResult {
 		return malePreference;
 	}
 
-	public SurveyResult(){
+	public SurveyModel(){
 		
 	}
 	
-	public SurveyResult(int productNumber){
+	public SurveyModel(int productNumber){
 		femalePreference = new int[productNumber];
 		malePreference = new int[productNumber];
 		//initializing the preference to zero
@@ -38,6 +40,7 @@ public class SurveyResult {
 	 * @param productIdx
 	 */
 	public void addPref(int gender, int productIdx){
+		numVotes++;
 		if (gender == 1)
 			femalePreference[productIdx] ++;
 		else
@@ -54,5 +57,9 @@ public class SurveyResult {
 			return femalePreference[productIdx];
 		else
 			return malePreference[productIdx];
+	}
+	
+	public String getVotes() {
+		return "" + numVotes;
 	}
 }

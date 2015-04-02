@@ -12,11 +12,18 @@
 </head>
 <body>
 <h3> Thank you for participating in the Mobile Purchasing Survey!</h3>
+${output}
 <h4> Current Survey Results: </h4>
 
 <h5> For Female Respondents</h5>
+<ul><c:forEach var="product" items="${productList}" varStatus="status">
+	<li><strong>${product}</strong>: ${model.getPref(1, status.count-1)}</li>
+</c:forEach></ul>
 
 <h5> For Male Respondents</h5>
+<ul><c:forEach var="product" items="${productList}" varStatus="status">
+	<li><strong>${product}</strong>: ${model.getPref(0, status.count-1)}</li>
+</c:forEach></ul>
 
 </body>
 </html>

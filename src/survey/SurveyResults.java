@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,14 +17,18 @@ import javax.servlet.http.HttpServletResponse;
  * This class handles survey submitted by the user and displays results in another JSP
  */
 
-@WebServlet("/survey")
-public class Survey extends HttpServlet {
+
+@WebServlet(value="/survey", initParams = {
+	@WebInitParam(name="products", value=survey.model.Config.PRODUCTS)
+})
+public class SurveyResults extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	public String output = "Test.";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public Survey() {
+	public SurveyResults() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -33,9 +38,26 @@ public class Survey extends HttpServlet {
 		// add your code here to get the survey data 
 		// and to store it in the surveyResult object
 
-
+		String[] productList = (String[]) getServletContext().getAttribute(SurveyForm.PRODUCT_LIST);
+		SurveyModel surveyModel = (SurveyModel) getServletContext().getAttribute(SurveyForm.SURVEY_RESULT);
+		
+		if (surveyModel == null || productList == null) {
+			String products = getServletConfig().getInitParameter("products");
+			productList = products.split(",");
+			surveyModel = new SurveyModel(productList.length);
+			getServletContext().setAttribute(SurveyForm.PRODUCT_LIST, productList);
+			getServletContext().setAttribute(SurveyForm.SURVEY_RESULT, surveyModel);
+		}
+		
+		Integer vote = Integer.parseInt(request.getParameter("vote"));
+		Integer gender = Integer.parseInt(request.getParameter("gender"));
+		surveyModel.addPref(gender, vote);
 
 		// let a jsp page display the result
+		String output = "Total votes: " + surveyModel.getVotes();
+		request.setAttribute("output", output);
+		request.setAttribute("model", surveyModel);
+		request.setAttribute("productList", productList);
 		RequestDispatcher view = request.getRequestDispatcher("/surveyResult.jsp");
 		view.forward(request,response);
 	}
@@ -45,6 +67,7 @@ public class Survey extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		processResult(request,response);
+		request.setAttribute("output", "abcdef");
 	}
 
 	/**
